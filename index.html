@@ -16,14 +16,18 @@
         <button type="submit">Зарегистрироваться</button>
     </form>
     <div id="userInfo"></div>
+    <input type="text" id="searchUser" placeholder="Поиск пользователя">
+    <div id="searchResults"></div>
 
     <script>
-        let userCount = 0;
+        let userCount = localStorage.getItem('userCount') || 0;
+        let users = JSON.parse(localStorage.getItem('users')) || [];
 
         document.getElementById('registrationForm').addEventListener('submit', function(event) {
             event.preventDefault();
             userCount++;
-            const userName = `@user${userCount}`;
+            localStorage.setItem('userCount', userCount);
+            const userName = `@${userCount}`;
             const userInfo = {
                 firstName: document.getElementById('firstName').value,
                 lastName: document.getElementById('lastName').value,
@@ -32,6 +36,8 @@
                 email: document.getElementById('email').value,
                 userName: userName
             };
+            users.push(userInfo);
+            localStorage.setItem('users', JSON.stringify(users));
             displayUserInfo(userInfo);
         });
 
@@ -46,6 +52,25 @@
                 <p>Электронная почта: ${userInfo.email}</p>
             `;
         }
+
+        document.getElementById('searchUser').addEventListener('input', function(event) {
+            const query = event.target.value.toLowerCase();
+            const searchResults = users.filter(user => user.userName.toLowerCase().includes(query));
+            displaySearchResults(searchResults);
+        });
+
+        function displaySearchResults(results) {
+            const searchResultsDiv = document.getElementById('searchResults');
+            searchResultsDiv.innerHTML = results.map(user => `<p>${user.userName}</p>`).join('');
+        }
+
+        // Загрузка данных пользователя при загрузке страницы
+        window.addEventListener('load', () => {
+            const savedUserInfo = localStorage.getItem('userInfo');
+            if (savedUserInfo) {
+                displayUserInfo(JSON.parse(savedUserInfo));
+            }
+        });
     </script>
 </body>
 </html>
