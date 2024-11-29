@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Messenger</title>
+</head>
+<body>
+    <h1>WebRTC Messenger</h1>
+    <form id="registrationForm">
+        <input type="text" id="firstName" placeholder="Имя">
+        <input type="text" id="lastName" placeholder="Фамилия">
+        <input type="text" id="middleName" placeholder="Отчество">
+        <input type="tel" id="phoneNumber" placeholder="Номер телефона">
+        <input type="email" id="email" placeholder="Электронная почта">
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <div id="userInfo"></div>
+
+    <script>
+        let userCount = 0;
+
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            userCount++;
+            const userName = `@user${userCount}`;
+            const userInfo = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                middleName: document.getElementById('middleName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                email: document.getElementById('email').value,
+                userName: userName
+            };
+            displayUserInfo(userInfo);
+        });
+
+        function displayUserInfo(userInfo) {
+            const userInfoDiv = document.getElementById('userInfo');
+            userInfoDiv.innerHTML = `
+                <p>Имя пользователя: ${userInfo.userName}</p>
+                <p>Имя: ${userInfo.firstName}</p>
+                <p>Фамилия: ${userInfo.lastName}</p>
+                <p>Отчество: ${userInfo.middleName}</p>
+                <p>Номер телефона: ${userInfo.phoneNumber}</p>
+                <p>Электронная почта: ${userInfo.email}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
